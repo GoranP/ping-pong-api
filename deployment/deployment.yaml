@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pingpong-service
+spec:
+  selector:
+    app: pingpong  # Label selector matching the pods of your deployment
+  ports:
+    - protocol: TCP
+      port: 3000   # Port on the service
+      targetPort: 3000  # Port on the pods
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ping-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /ping
+        pathType: Prefix
+        backend:
+          service:
+            name: pingpong-service
+            port:
+              number: 3000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pingpong-deployment
+  labels:
+    app: pingpong
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pingpong
+  template:
+    metadata:
+      labels:
+        app: pingpong
+    spec:
+      containers:
+      - name: pingpong
+        image: goranpp/pingpong
+        command: ["node"]
+        args: ["server.js"]
+        ports:
+        - containerPort: 3000
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - pingpong
+            topologyKey: "kubernetes.io/hostname"
+
+
