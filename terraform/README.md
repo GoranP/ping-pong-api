@@ -1,6 +1,5 @@
 # Build AWS VPC and Kubernetes cluster (EKS)
 
-
 ## Prerequisites 
 - Setup [AWS account](https://docs.aws.amazon.com/SetUp/latest/UserGuide/setup-AWSsignup.html)
 - On build machine install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
