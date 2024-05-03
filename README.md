@@ -24,6 +24,7 @@ On Mac or any other ARM architecture export environment variable in the shell to
 
 ### Build and push image to the target repository
 ```docker build . -t <reponame>/pingpong:latest --push```
+
 Replace <reponame> with your target repo where you have access to push.
 
 
